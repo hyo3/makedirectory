@@ -40,61 +40,45 @@ def replace_word_in_file(file_path, before_word, after_word):
     with open(file_path, mode="w", encoding="utf-8") as f:
         f.write(data_lines)
 
-lesson_count = input("授業回数：")
-practice_num = input("演習の個数：")
+
+def make_directory(lesson_count, task_num, task_name):
+
+    if task_num != 0:
+        
+        for num in range(int(task_num)):
+            num += 1
+        
+            #ファイル名に含まれる変更したい単語と変更後の単語
+            
+            after_word  = task_name + lesson_count + "." + str(num)
+            
+            
+            source_dir_path      = "C:\\Users\\hyo\\source\\repos\\" + before_word
+            destination_dir_path = "C:\\Users\\hyo\\source\\repos\\" + after_word
+            
+            if os.path.exists(destination_dir_path) != True:
+                
+                shutil.copytree(source_dir_path, destination_dir_path) 
+                shutil.rmtree(destination_dir_path + "/.vs")
+                rename_files(before_word, after_word, destination_dir_path)
+                print("{}を作成しました。".format(after_word))
+                
+                files_name = [destination_dir_path + "/" + after_word + ".sln",
+                            destination_dir_path + ("/" + after_word) * 2 + ".vcxproj"]
+
+                for file in files_name:
+                    
+                    replace_word_in_file(file, before_word, after_word)
+                    replace_word_in_file(file, before_word.replace(".", ""), after_word.replace(".", ""))
+
+
+
+lesson_count   = input("授業回数：")
+practice_num   = input("演習の個数：")
 assignment_num = input("課題の個数：")
 
+practice   = "演習"
+assignment = "課題"
 
-if practice_num != 0:
-    
-    for num in range(int(practice_num)):
-        num += 1
-    
-        #ファイル名に含まれる変更したい単語と変更後の単語
-        
-        after_word  = "演習" + lesson_count + "." + str(num)
-        
-        source_dir_path      = "C:\\Users\\hyo\\source\\repos\\" + before_word
-        destination_dir_path = "C:\\Users\\hyo\\source\\repos\\" + after_word
-        
-        if os.path.exists(destination_dir_path) != True:
-            
-            shutil.copytree(source_dir_path, destination_dir_path) 
-            shutil.rmtree(destination_dir_path + "/.vs")
-            rename_files(before_word, after_word, destination_dir_path)
-            print("{}を作成しました。".format(after_word))
-            
-            files_name = [destination_dir_path + "/" + after_word + ".sln",
-                          destination_dir_path + ("/" + after_word) * 2 + ".vcxproj"]
-
-            for file in files_name:
-                
-                replace_word_in_file(file, before_word, after_word)
-                replace_word_in_file(file, before_word.replace(".", ""), after_word.replace(".", ""))
-                
-if assignment_num != 0:
-    
-    for num in range(int(assignment_num)):
-        num += 1
-        
-    #ファイル名に含まれる変更したい単語と変更後の単語
-
-        after_word = "課題" + lesson_count + "." + str(num)
-    
-        source_dir_path      = "C:\\Users\\hyo\\source\\repos\\" + before_word
-        destination_dir_path = "C:\\Users\\hyo\\source\\repos\\" + after_word
-        
-        if os.path.exists(destination_dir_path) != True:
-        
-            shutil.copytree(source_dir_path, destination_dir_path)
-            shutil.rmtree(destination_dir_path + "/.vs")
-            rename_files(before_word, after_word, destination_dir_path)
-            print("{}を作成しました。".format(after_word))
-            
-            files_name = [destination_dir_path + "/" + after_word + ".sln",
-                          destination_dir_path + ("/" + after_word) * 2  + ".vcxproj"]
-
-            for file in files_name:
-                
-                replace_word_in_file(file, before_word, after_word)
-                replace_word_in_file(file, before_word.replace(".", ""), after_word.replace(".", ""))
+make_directory(lesson_count, practice_num, practice)
+make_directory(lesson_count, assignment_num, assignment)
